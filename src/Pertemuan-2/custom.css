@@ -1,0 +1,76 @@
+/* Styling untuk keseluruhan halaman */
+body {
+    font-family: 'Poppins', Arial, sans-serif;
+    background: radial-gradient(circle at top, #0a1a3f, #050d22, #020611);
+    color: #e6f0ff;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Container utama seperti panel hero */
+.card {
+    max-width: 600px;
+    margin: 40px auto;
+    background: linear-gradient(145deg, #0b1f4a, #06102b);
+    padding: 25px;
+    border-radius: 12px;
+
+    /* border emas ala game */
+    border: 2px solid #d4af37;
+
+    /* glow effect */
+    box-shadow:
+        0 0 10px rgba(212,175,55,0.6),
+        0 0 20px rgba(0,170,255,0.4),
+        inset 0 0 15px rgba(255,255,255,0.05);
+
+    transition: all 0.3s ease;
+}
+
+/* Header utama seperti judul hero */
+h1 {
+    text-align: center;
+    color: #ffd700;
+    letter-spacing: 2px;
+    font-size: 34px;
+
+    text-shadow:
+        0 0 8px rgba(255,215,0,0.9),
+        0 0 15px rgba(255,215,0,0.5);
+}
+
+/* Paragraf */
+p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #cfe3ff;
+}
+
+/* Garis pemisah seperti energi */
+hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00c3ff, #ffd700, transparent);
+    margin: 15px 0;
+}
+
+/* Greeting */
+small {
+    display: block;
+    font-style: italic;
+    text-align: center;
+    color: #9cc6ff;
+    margin-top: 8px;
+
+    text-shadow: 0 0 6px rgba(0,195,255,0.7);
+}
+
+/* Efek hover seperti menu game */
+.card:hover {
+    transform: translateY(-6px) scale(1.02);
+
+    box-shadow:
+        0 0 15px rgba(255,215,0,0.9),
+        0 0 30px rgba(0,195,255,0.7),
+        inset 0 0 20px rgba(255,255,255,0.08);
+}
