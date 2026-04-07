@@ -1,11 +1,27 @@
 import { useState } from "react";
 import frameworkData from "./framework.json";
+import { motion, AnimatePresence } from "framer-motion";
 
 
 export default function FrameworklistSearchFilter() {
-    const [searchTerm, setSearchTerm] = useState("");
-    const [selectedTag, setSelectedTag] = useState("");
-    const _searchTerm = searchTerm.toLowerCase();
+    // const [searchTerm, setSearchTerm] = useState("");
+    // const [selectedTag, setSelectedTag] = useState("");
+    const [dataForm, setDataForm] = useState({
+			searchTerm: "",
+			selectedTag: "",
+			/*Tambah state lain beserta default value*/
+			});
+		
+		/*Inisialisasi Handle perubahan nilai input form*/
+		const handleChange = (evt) => {
+			const { name, value } = evt.target;
+			setDataForm({
+				...dataForm,
+				[name]: value,
+			});
+		};
+
+    const _searchTerm = dataForm.searchTerm.toLowerCase();
 
     const filteredFrameworks = frameworkData.filter((framework) => {
         const matchesSearch =
@@ -16,7 +32,7 @@ export default function FrameworklistSearchFilter() {
                 .toLowerCase()
                 .includes(_searchTerm);
 
-        const matchesTag = selectedTag ? framework.tags.includes(selectedTag) : true;
+        const matchesTag = dataForm.selectedTag ? framework.tags.includes(dataForm.selectedTag) : true;
 
         return matchesSearch && matchesTag;
 
@@ -37,7 +53,7 @@ export default function FrameworklistSearchFilter() {
 
                 <div className="grid gap-6">
                     <input
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={handleChange}
                         type="text"
                         name="searchTerm"
                         placeholder="Search framework..."
@@ -45,7 +61,7 @@ export default function FrameworklistSearchFilter() {
                     />
 
                     <select
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={handleChange}
                         name="selectedTag"
                         className="w-full p-2 border border-gray-300 rounded mb-4"
                     >
@@ -56,7 +72,7 @@ export default function FrameworklistSearchFilter() {
                             </option>
                         ))}
                     </select>
-                    {filteredFrameworks.map((item) => (
+                    {filteredFrameworks.map((item, index) => (
                         <div
                             key={item.id}
                             className="group relative border border-gray-100 p-6 rounded-2xl shadow-sm bg-white hover:shadow-xl transition-all duration-300 ease-in-out hover:-translate-y-1"
