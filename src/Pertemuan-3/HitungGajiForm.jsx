@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+// ini sebuah function JS , kalau javascript tidak bisa buat di bawah return
 export default function HitungGajiForm() {
     const [gaji, setGaji] = useState("");
 
