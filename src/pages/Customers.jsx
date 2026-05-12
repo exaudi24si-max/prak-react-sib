@@ -1,25 +1,10 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
-
-const generateCustomers = () => {
-  const loyalties = ["Bronze", "Silver", "Gold"];
-  const firstNames = ["Andi","Budi","Cici","Dodi","Eka","Fani","Gita","Hadi","Indah","Joko","Kiki","Lina","Maya","Nina","Oscar"];
-  const customers = [];
-  for (let i = 1; i <= 30; i++) {
-    const firstName = firstNames[i % firstNames.length];
-    customers.push({
-      id: i,
-      name: `${firstName} ${Math.floor(Math.random() * 100)}`,
-      email: `customer${i}@example.com`,
-      phone: `0812${String(i).padStart(3,'0')}${String(i).padStart(3,'0')}`,
-      loyalty: loyalties[Math.floor(Math.random() * 3)],
-    });
-  }
-  return customers;
-};
+import { customers as initialCustomers } from "../data/customers";
 
 export default function Customers() {
-  const [customers, setCustomers] = useState(generateCustomers());
+  const [customers, setCustomers] = useState(initialCustomers);
   const [showForm, setShowForm] = useState(false);
   const [newCustomer, setNewCustomer] = useState({ name: "", email: "", phone: "", loyalty: "Bronze" });
 
@@ -70,9 +55,13 @@ export default function Customers() {
           </thead>
           <tbody>
             {customers.map(c => (
-              <tr key={c.id} className="border-b">
+              <tr key={c.id} className="border-b hover:bg-slate-50">
                 <td className="p-3">{c.id}</td>
-                <td className="p-3">{c.name}</td>
+                <td className="p-3">
+                  <Link to={`/customers/${c.id}`} className="text-slate-900 font-medium hover:text-blue-600">
+                    {c.name}
+                  </Link>
+                </td>
                 <td className="p-3">{c.email}</td>
                 <td className="p-3">{c.phone}</td>
                 <td className="p-3"><span className={`px-2 py-1 rounded-full text-xs ${c.loyalty==='Gold'?'bg-yellow-200':c.loyalty==='Silver'?'bg-gray-200':'bg-orange-200'}`}>{c.loyalty}</span></td>
