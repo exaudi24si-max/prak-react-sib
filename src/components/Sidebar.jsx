@@ -1,4 +1,4 @@
-import { MdDashboard, MdShoppingCart, MdPeople, MdAdd, MdErrorOutline, MdApps } from "react-icons/md";
+import { MdDashboard, MdShoppingCart, MdPeople, MdInventory, MdAdd, MdErrorOutline, MdApps } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {
@@ -48,6 +48,12 @@ export default function Sidebar() {
             <NavLink id="menu-components" to="/components" className={menuClass}>
               <MdApps className="mr-4 text-xl" />
               <span>Components</span>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink id="menu-4" to="/products" className={menuClass}>
+              <MdInventory className="mr-4 text-xl" />
+              <span>Products</span>
             </NavLink>
           </li>
           {/* Menu Error */}

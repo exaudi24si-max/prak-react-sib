@@ -9,6 +9,9 @@ const Dashboard = React.lazy(() => import("./pages/Dashboard"));
 const Orders = React.lazy(() => import("./pages/Orders"));
 const Customers = React.lazy(() => import("./pages/Customers"));
 const Components = React.lazy(() => import("./pages/Components"));
+const CustomerDetail = React.lazy(() => import("./pages/CustomerDetail"));
+const Products = React.lazy(() => import("./pages/Products"));
+const ProductDetail = React.lazy(() => import("./pages/ProductDetail"));
 const NotFound = React.lazy(() => import("./pages/NotFound"));
 const ErrorPage = React.lazy(() => import("./pages/ErrorPage"));
 const Login = React.lazy(() => import("./pages/Auth/Login"));
@@ -26,6 +29,9 @@ function App() {
           <Route path="/orders" element={<Orders />} />
           <Route path="/customers" element={<Customers />} />
           <Route path="/components" element={<Components />} />
+          <Route path="/customers/:id" element={<CustomerDetail />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/error/400" element={<ErrorPage code="400" description="Bad Request - Permintaan tidak valid" />} />
           <Route path="/error/401" element={<ErrorPage code="401" description="Unauthorized - Anda tidak memiliki akses" />} />
           <Route path="/error/403" element={<ErrorPage code="403" description="Forbidden - Akses dilarang" />} />
