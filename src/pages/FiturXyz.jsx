@@ -1,55 +1,41 @@
-import { FaShoppingCart, FaTruck, FaBan, FaDollarSign } from "react-icons/fa";
-import PageHeader from "../components/PageHeader";
+import PageHeader from "@/components/PageHeader";
+import { Button } from "@/components/ui/button";
 
 export default function FiturXyz() {
   return (
-    <div className="w-full">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        
-        {/* Card Orders */}
-        <div className="flex items-center gap-5 bg-white rounded-2xl shadow-sm border border-garis p-6 hover:shadow-md transition-shadow">
-          <div className="bg-emerald-100 text-hijau rounded-full p-4 flex-shrink-0">
-            <FaShoppingCart size={28} />
+    <div className="space-y-6">
+      <PageHeader title="Fitur XYZ" breadcrumb="Fitur XYZ" />
+
+      <div className="rounded-[2rem] bg-white p-6 shadow-sm ring-1 ring-slate-200">
+        <div className="space-y-6">
+          <div className="grid gap-6 md:grid-cols-3">
+            <div className="rounded-3xl bg-slate-50 p-5">
+              <p className="text-sm uppercase tracking-[0.2em] text-slate-500">Status</p>
+              <h2 className="mt-3 text-2xl font-semibold text-slate-900">Aktif</h2>
+              <p className="mt-2 text-sm text-slate-600">Fitur XYZ sudah siap ditampilkan dan diintegrasikan ke dashboard Anda.</p>
+            </div>
+            <div className="rounded-3xl bg-slate-50 p-5">
+              <p className="text-sm uppercase tracking-[0.2em] text-slate-500">Versi</p>
+              <h2 className="mt-3 text-2xl font-semibold text-slate-900">1.0.0</h2>
+              <p className="mt-2 text-sm text-slate-600">Versi awal yang menampilkan statistik dasar dan kontrol tindakan.</p>
+            </div>
+            <div className="rounded-3xl bg-slate-50 p-5">
+              <p className="text-sm uppercase tracking-[0.2em] text-slate-500">Keterangan</p>
+              <h2 className="mt-3 text-2xl font-semibold text-slate-900">UI Panel</h2>
+              <p className="mt-2 text-sm text-slate-600">Gunakan tombol di bawah untuk melihat contoh aksi dan gaya komponen.</p>
+            </div>
           </div>
-          <div className="flex flex-col">
-            <span className="text-3xl font-bold font-poppins text-teks">90</span>
-            <span className="text-sm text-teks-samping mt-1">Total Orders</span>
+
+          <div className="rounded-3xl bg-slate-50 p-6">
+            <p className="text-base font-medium text-slate-900">Aksi Tersedia</p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <Button variant="default">Simpan</Button>
+              <Button variant="outline">Edit</Button>
+              <Button variant="ghost">Batal</Button>
+              <Button variant="destructive">Hapus</Button>
+            </div>
           </div>
         </div>
-
-        {/* Card Delivered */}
-        <div className="flex items-center gap-5 bg-white rounded-2xl shadow-sm border border-garis p-6 hover:shadow-md transition-shadow">
-          <div className="bg-blue-50 text-biru rounded-full p-4 flex-shrink-0">
-            <FaTruck size={28} />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-3xl font-bold font-poppins text-teks">275</span>
-            <span className="text-sm text-teks-samping mt-1">Total Delivered</span>
-          </div>
-        </div>
-
-        {/* Card Canceled */}
-        <div className="flex items-center gap-5 bg-white rounded-2xl shadow-sm border border-garis p-6 hover:shadow-md transition-shadow">
-          <div className="bg-red-50 text-merah rounded-full p-4 flex-shrink-0">
-            <FaBan size={28} />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-3xl font-bold font-poppins text-teks">80</span>
-            <span className="text-sm text-teks-samping mt-1">Total Canceled</span>
-          </div>
-        </div>
-
-        {/* Card Revenue */}
-        <div className="flex items-center gap-5 bg-white rounded-2xl shadow-sm border border-garis p-6 hover:shadow-md transition-shadow">
-          <div className="bg-orange-50 text-kuning rounded-full p-4 flex-shrink-0">
-            <FaDollarSign size={28} />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-3xl font-bold font-poppins text-teks">Rp.345</span>
-            <span className="text-sm text-teks-samping mt-1">Total Revenue</span>
-          </div>
-        </div>
-
       </div>
     </div>
   );
