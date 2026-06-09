@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg';
 import "./assets/tailwind.css";
 import { Route, Routes } from 'react-router-dom';
 import Loading from './components/Loading';
+import Note from './pages/Auth/Note';
 
 const Dashboard = React.lazy(() => import("./pages/Dashboard"));
 const Orders = React.lazy(() => import("./pages/Orders"));
@@ -21,6 +22,7 @@ const Forgot = React.lazy(() => import("./pages/Auth/Forgot"));
 const MainLayout = React.lazy(() => import("./layouts/MainLayout"));
 const AuthLayout = React.lazy(() => import("./layouts/AuthLayout"));
 
+
 function App() {
   return (
     <Suspense fallback={<Loading />}>
@@ -31,6 +33,7 @@ function App() {
           <Route path="/customers" element={<Customers />} />
           <Route path="/components" element={<Components />} />
           <Route path="/fitur-xyz" element={<FiturXyz />} />
+          <Route path="/notes" element={<Note />} />
           <Route path="/customers/:id" element={<CustomerDetail />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductDetail />} />

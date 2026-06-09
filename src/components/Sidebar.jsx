@@ -1,3 +1,4 @@
+import { BiNote } from "react-icons/bi"; 
 import { MdDashboard, MdShoppingCart, MdPeople, MdInventory, MdAdd, MdErrorOutline, MdApps } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 
@@ -62,6 +63,12 @@ export default function Sidebar() {
               <span>Fitur XYZ</span>
             </NavLink>
           </li> 
+          <li>
+            <NavLink id="menu-react<BiNote />" to="/notes" className={menuClass}>
+              <MdApps className="mr-4 text-xl" />
+              <span>Note</span>
+            </NavLink>
+          </li>
           {/* Menu Error */}
           <li>
             <NavLink to="/error/400" className={menuClass}>
