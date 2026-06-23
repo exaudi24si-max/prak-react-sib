@@ -1,7 +1,27 @@
+import { useEffect, useState } from "react"
 import { FaShoppingCart, FaTruck, FaBan, FaDollarSign } from "react-icons/fa";
 import PageHeader from "../components/PageHeader";
+import { getDashboardSummary } from "../services/supabaseService"
 
 export default function Dashboard() {
+  const [summary, setSummary] = useState({
+    totalOrders: 0,
+    totalDelivered: 0,
+    totalCanceled: 0,
+    totalRevenue: 0,
+  })
+
+  useEffect(() => {
+    async function loadSummary() {
+      const { data, error } = await getDashboardSummary()
+      if (!error && data) {
+        setSummary(data)
+      }
+    }
+
+    loadSummary()
+  }, [])
+
   return (
     <div className="w-full">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -12,7 +32,7 @@ export default function Dashboard() {
             <FaShoppingCart size={28} />
           </div>
           <div className="flex flex-col">
-            <span className="text-3xl font-bold font-poppins text-teks">90</span>
+            <span className="text-3xl font-bold font-poppins text-teks">{summary.totalOrders}</span>
             <span className="text-sm text-teks-samping mt-1">Total Orders</span>
           </div>
         </div>
@@ -23,7 +43,7 @@ export default function Dashboard() {
             <FaTruck size={28} />
           </div>
           <div className="flex flex-col">
-            <span className="text-3xl font-bold font-poppins text-teks">275</span>
+            <span className="text-3xl font-bold font-poppins text-teks">{summary.totalDelivered}</span>
             <span className="text-sm text-teks-samping mt-1">Total Delivered</span>
           </div>
         </div>
@@ -34,7 +54,7 @@ export default function Dashboard() {
             <FaBan size={28} />
           </div>
           <div className="flex flex-col">
-            <span className="text-3xl font-bold font-poppins text-teks">80</span>
+            <span className="text-3xl font-bold font-poppins text-teks">{summary.totalCanceled}</span>
             <span className="text-sm text-teks-samping mt-1">Total Canceled</span>
           </div>
         </div>
@@ -45,7 +65,7 @@ export default function Dashboard() {
             <FaDollarSign size={28} />
           </div>
           <div className="flex flex-col">
-            <span className="text-3xl font-bold font-poppins text-teks">Rp.345</span>
+            <span className="text-3xl font-bold font-poppins text-teks">Rp {summary.totalRevenue.toLocaleString('id-ID')}</span>
             <span className="text-sm text-teks-samping mt-1">Total Revenue</span>
           </div>
         </div>

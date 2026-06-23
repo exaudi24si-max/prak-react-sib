@@ -1,33 +1,46 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
+import { createOrder, getOrders } from "../services/supabaseService";
 
-const generateOrders = () => {
-  const statuses = ["Pending", "Completed", "Cancelled"];
-  const customerNames = ["Andi","Budi","Cici","Dodi","Eka","Fani","Gita","Hadi","Indah","Joko"];
-  const orders = [];
-  for (let i = 1; i <= 30; i++) {
-    const date = new Date(2025, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1);
-    orders.push({
-      id: i,
-      customerName: customerNames[i % customerNames.length] + " " + Math.floor(Math.random() * 100),
-      status: statuses[Math.floor(Math.random() * 3)],
-      totalPrice: Math.floor(Math.random() * 500000) + 50000,
-      orderDate: date.toISOString().split('T')[0],
-    });
-  }
-  return orders;
-};
+// BUG FIX #3: Hapus fungsi generateOrders() — dead code yang tidak pernah digunakan
 
 export default function Orders() {
-  const [orders, setOrders] = useState(generateOrders());
+  const [orders, setOrders] = useState([]);
   const [showForm, setShowForm] = useState(false);
-  const [newOrder, setNewOrder] = useState({ customerName: "", status: "Pending", totalPrice: "", orderDate: "" });
+  // BUG FIX #3: Sederhanakan state — hapus customerName & orderDate
+  // (member_id diambil dari session, created_at otomatis dari Supabase)
+  const [newOrder, setNewOrder] = useState({ status: "Pending", totalPrice: "" });
 
-  const handleAdd = () => {
-    if (!newOrder.customerName || !newOrder.totalPrice || !newOrder.orderDate) return;
-    const newId = orders.length + 1;
-    setOrders([...orders, { id: newId, ...newOrder, totalPrice: Number(newOrder.totalPrice) }]);
-    setNewOrder({ customerName: "", status: "Pending", totalPrice: "", orderDate: "" });
+  useEffect(() => {
+    async function loadOrders() {
+      const { data, error } = await getOrders()
+      if (!error) {
+        setOrders(data)
+      }
+    }
+
+    loadOrders()
+  }, [])
+
+  const handleAdd = async () => {
+    if (!newOrder.totalPrice) return;
+
+    const { data, error } = await createOrder({
+      totalPrice: Number(newOrder.totalPrice),
+      status: newOrder.status,
+    })
+
+    if (error) {
+      window.alert(error.message || "Gagal membuat order.")
+      return
+    }
+
+    const { data: updatedOrders, error: fetchError } = await getOrders()
+    if (!fetchError) {
+      setOrders(updatedOrders)
+    }
+
+    setNewOrder({ status: "Pending", totalPrice: "" });
     setShowForm(false);
   };
 
@@ -43,12 +56,10 @@ export default function Orders() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg w-96">
             <h2 className="text-xl font-bold mb-4">Tambah Order</h2>
-            <input type="text" placeholder="Customer Name" value={newOrder.customerName} onChange={(e) => setNewOrder({...newOrder, customerName: e.target.value})} className="border p-2 w-full mb-2 rounded" />
             <select value={newOrder.status} onChange={(e) => setNewOrder({...newOrder, status: e.target.value})} className="border p-2 w-full mb-2 rounded">
               <option>Pending</option><option>Completed</option><option>Cancelled</option>
             </select>
-            <input type="number" placeholder="Total Price" value={newOrder.totalPrice} onChange={(e) => setNewOrder({...newOrder, totalPrice: e.target.value})} className="border p-2 w-full mb-2 rounded" />
-            <input type="date" placeholder="Order Date" value={newOrder.orderDate} onChange={(e) => setNewOrder({...newOrder, orderDate: e.target.value})} className="border p-2 w-full mb-4 rounded" />
+            <input type="number" placeholder="Total Price (Rp)" value={newOrder.totalPrice} onChange={(e) => setNewOrder({...newOrder, totalPrice: e.target.value})} className="border p-2 w-full mb-4 rounded" />
             <div className="flex justify-end space-x-2">
               <button onClick={() => setShowForm(false)} className="px-4 py-2 bg-gray-300 rounded">Batal</button>
               <button onClick={handleAdd} className="px-4 py-2 bg-green-600 text-white rounded">Simpan</button>

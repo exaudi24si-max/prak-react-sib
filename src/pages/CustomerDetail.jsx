@@ -1,16 +1,40 @@
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getCustomerById } from "../data/customers";
+import { getCustomerById } from "../services/supabaseService";
 
 export default function CustomerDetail() {
   const { id } = useParams();
-  const customer = getCustomerById(id);
+  const [customer, setCustomer] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  if (!customer) {
+  useEffect(() => {
+    async function loadCustomer() {
+      const { data, error } = await getCustomerById(id);
+      if (error) {
+        setError(error.message);
+      } else {
+        setCustomer(data);
+      }
+      setLoading(false);
+    }
+    loadCustomer();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-slate-50 p-6 flex items-center justify-center">
+        <div className="w-10 h-10 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+      </main>
+    );
+  }
+
+  if (error || !customer) {
     return (
       <main className="min-h-screen bg-slate-50 p-6">
         <div className="mx-auto max-w-3xl rounded-3xl bg-white p-8 shadow-sm">
           <h1 className="text-2xl font-semibold text-slate-900">Customer tidak ditemukan</h1>
-          <p className="mt-3 text-slate-600">Silakan kembali ke halaman pelanggan dan pilih customer yang tersedia.</p>
+          <p className="mt-3 text-slate-600">{error || "Silakan kembali ke halaman pelanggan dan pilih customer yang tersedia."}</p>
           <Link to="/customers" className="mt-6 inline-flex rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700">
             Kembali ke Customers
           </Link>
@@ -26,7 +50,7 @@ export default function CustomerDetail() {
           <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
             <div>
               <h1 className="text-3xl font-semibold text-slate-900">{customer.name}</h1>
-              <p className="mt-2 text-slate-600">Detail customer untuk ID <span className="font-medium text-slate-900">{customer.id}</span></p>
+              <p className="mt-2 text-slate-600">Detail customer untuk ID <span className="font-medium text-slate-900">{customer.id?.slice(0, 8)}...</span></p>
             </div>
             <Link to="/customers" className="inline-flex items-center rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700">
               Kembali ke Customers

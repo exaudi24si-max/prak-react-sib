@@ -1,8 +1,23 @@
+import { useEffect, useState } from "react";
 import { FaBell, FaSearch } from "react-icons/fa";
 import { FcAreaChart } from "react-icons/fc";
 import { SlSettings } from "react-icons/sl";
+import { getCurrentUserProfile } from "../services/supabaseService";
 
+// BUG FIX #6: Ambil nama user dinamis dari Supabase session (tidak hardcoded lagi)
 export default function Header() {
+  const [fullName, setFullName] = useState("...")
+
+  useEffect(() => {
+    async function loadProfile() {
+      const { data } = await getCurrentUserProfile()
+      if (data?.full_name) {
+        setFullName(data.full_name)
+      }
+    }
+    loadProfile()
+  }, [])
+
   return (
     <div
       id="header-container"
@@ -60,13 +75,13 @@ export default function Header() {
           <SlSettings />
         </div>
 
-        {/* Profile */}
+        {/* Profile — Dinamis dari Supabase */}
         <div
           id="profile-container"
           className="flex items-center space-x-4 border-l pl-4 border-gray-300"
         >
           <span id="profile-text">
-            Hello, <b>EXAUDI BANJARNAHOR</b>
+            Hello, <b>{fullName}</b>
           </span>
           <img
             id="profile-avatar"

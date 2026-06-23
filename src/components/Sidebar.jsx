@@ -1,8 +1,11 @@
-import { BiNote } from "react-icons/bi"; 
-import { MdDashboard, MdShoppingCart, MdPeople, MdInventory, MdAdd, MdErrorOutline, MdApps } from "react-icons/md";
-import { NavLink } from "react-router-dom";
+import { BiNote } from "react-icons/bi";
+import { MdDashboard, MdShoppingCart, MdPeople, MdInventory, MdAdd, MdErrorOutline, MdApps, MdLogout } from "react-icons/md";
+import { NavLink, useNavigate } from "react-router-dom";
+import { signOutUser } from "../services/supabaseService";
 
 export default function Sidebar() {
+  const navigate = useNavigate()
+
   const menuClass = ({ isActive }) =>
     `flex cursor-pointer items-center rounded-xl p-4 space-x-2
         ${
@@ -10,6 +13,11 @@ export default function Sidebar() {
             ? "text-blue bg-green-200 font-extrabold"
             : "text-gray-600 hover:text-hijau hover:bg-green-200 hover:font-extrabold"
         }`;
+
+  const handleLogout = async () => {
+    await signOutUser()
+    navigate("/login")
+  }
 
   return (
     <div
@@ -62,10 +70,10 @@ export default function Sidebar() {
               <MdApps className="mr-4 text-xl" />
               <span>Fitur XYZ</span>
             </NavLink>
-          </li> 
+          </li>
           <li>
-            <NavLink id="menu-react<BiNote />" to="/notes" className={menuClass}>
-              <MdApps className="mr-4 text-xl" />
+            <NavLink id="menu-notes" to="/notes" className={menuClass}>
+              <BiNote className="mr-4 text-xl" />
               <span>Note</span>
             </NavLink>
           </li>
@@ -102,6 +110,17 @@ export default function Sidebar() {
           </div>
           <img className="w-20 h-20 rounded-full ml-4" src="https://avatar.iran.liara.run/public/28" alt="avatar" />
         </div>
+
+        {/* Tombol Logout */}
+        <button
+          id="logout-button"
+          onClick={handleLogout}
+          className="flex items-center w-full rounded-xl p-4 space-x-2 text-red-500 hover:bg-red-50 hover:font-semibold transition-colors mb-4"
+        >
+          <MdLogout className="mr-4 text-xl" />
+          <span>Logout</span>
+        </button>
+
         <span className="font-bold text-gray-400">Sedap Restaurant Admin Dashboard</span>
         <p className="font-light text-gray-400">&copy; 2025 All Right Reserved</p>
       </div>

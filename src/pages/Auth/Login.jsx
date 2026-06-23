@@ -1,8 +1,8 @@
-import axios from "axios"
 import { useState } from "react"
 import { BsFillExclamationDiamondFill } from "react-icons/bs"
 import { ImSpinner2 } from "react-icons/im"
 import { useNavigate } from "react-router-dom"
+import { signInUser } from "../../services/supabaseService"
 
 export default function Login() {
     const navigate = useNavigate()
@@ -25,34 +25,31 @@ export default function Login() {
         e.preventDefault()
 
         setLoading(true)
-        setError(false)
+        setError("")
 
-        axios
-            .post("https://dummyjson.com/user/login", {
-                username: dataForm.email,
-                password: dataForm.password,
-            })
-            .then((response) => {
-                // Jika status bukan 200, tampilkan pesan error
-                if (response.status !== 200) {
-                    setError(response.data.message);
-                    return;
-                }
+        const { data, error } = await signInUser({
+            email: dataForm.email,
+            password: dataForm.password,
+        })
 
-                // Redirect ke dashboard jika login sukses
-                navigate("/");
-            })
-            .catch((err) => {
-                if (err.response) {
-                    setError(err.response.data.message || "An error occurred");
-                } else {
-                    setError(err.message || "An unknown error occurred");
-                }
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+        if (error) {
+            const message =
+                (typeof error === 'string' && error) ||
+                (error && (error.message || error.error || error.msg)) ||
+                JSON.stringify(error)
 
+            setError(message || "Login gagal. Periksa kembali email dan password.")
+            setLoading(false)
+            return
+        }
+
+        if (data.user) {
+            navigate("/")
+        } else {
+            setError("Login gagal. Silakan coba lagi.")
+        }
+
+        setLoading(false)
     }
 
     // Error dan loading info
@@ -89,6 +86,7 @@ export default function Login() {
                         type="text"
                         id="email"
                         name="email"
+                        value={dataForm.email}
                         onChange={handleChange}
                         className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm
                             placeholder-gray-400"
@@ -103,6 +101,7 @@ export default function Login() {
                         type="password"
                         id="password"
                         name="password"
+                        value={dataForm.password}
                         onChange={handleChange}
                         className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm
                             placeholder-gray-400"

@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
-import productsData from "../../data/Products.json";
+import { createProduct, getProducts } from "../services/supabaseService";
 
 export default function Products() {
-  const [products, setProducts] = useState(productsData);
+  const [products, setProducts] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  // BUG FIX #1: Rename 'tittle' → 'title'
   const [newProduct, setNewProduct] = useState({
-    tittle: "",
+    title: "",
     code: "",
     category: "",
     brand: "",
@@ -15,11 +16,37 @@ export default function Products() {
     stock: 0,
   });
 
-  const handleAdd = () => {
-    if (!newProduct.tittle || !newProduct.code) return;
-    const newId = products.length + 1;
-    setProducts([...products, { id: newId, ...newProduct }]);
-    setNewProduct({ tittle: "", code: "", category: "", brand: "", price: 0, stock: 0 });
+  useEffect(() => {
+    async function loadProducts() {
+      const { data, error } = await getProducts();
+      if (!error) {
+        setProducts(data);
+      }
+    }
+
+    loadProducts();
+  }, []);
+
+  const handleAdd = async () => {
+    if (!newProduct.title || !newProduct.code) return;
+
+    const { data, error } = await createProduct({
+      ...newProduct,
+      price: Number(newProduct.price),
+      stock: Number(newProduct.stock),
+    });
+
+    if (error) {
+      window.alert(error.message || "Gagal menambahkan produk.")
+      return;
+    }
+
+    const { data: updatedProducts, error: fetchError } = await getProducts();
+    if (!fetchError) {
+      setProducts(updatedProducts);
+    }
+
+    setNewProduct({ title: "", code: "", category: "", brand: "", price: 0, stock: 0 });
     setShowForm(false);
   };
 
@@ -41,8 +68,8 @@ export default function Products() {
             <input
               type="text"
               placeholder="Judul Produk"
-              value={newProduct.tittle}
-              onChange={(e) => setNewProduct({ ...newProduct, tittle: e.target.value })}
+              value={newProduct.title}
+              onChange={(e) => setNewProduct({ ...newProduct, title: e.target.value })}
               className="border p-2 w-full mb-2 rounded"
             />
             <input
@@ -115,7 +142,7 @@ export default function Products() {
                     to={`/products/${p.id}`}
                     className="text-slate-900 font-medium hover:text-blue-600"
                   >
-                    {p.tittle}
+                    {p.title}
                   </Link>
                 </td>
                 <td className="p-3">{p.code}</td>
